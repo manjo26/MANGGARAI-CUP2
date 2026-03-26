@@ -1,5 +1,5 @@
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: Arial;
   background: linear-gradient(135deg, #0f172a, #1e293b);
   color: white;
   text-align: center;
@@ -17,7 +17,6 @@ h1 {
 
 .card {
   background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 20px;
   margin: 20px;
@@ -31,12 +30,11 @@ table {
 th {
   background: #38bdf8;
   color: black;
-  padding: 10px;
 }
 
 td {
   padding: 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid #555;
 }
 
 tr:hover {
@@ -49,9 +47,9 @@ tr:hover {
 
 button {
   padding: 10px;
+  background: #38bdf8;
   border: none;
   border-radius: 8px;
-  background: #38bdf8;
   cursor: pointer;
 }
 
