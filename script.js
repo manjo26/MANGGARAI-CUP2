@@ -1,35 +1,33 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, getDocs,
-  deleteDoc, doc, updateDoc, onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+const PASSWORD = "admin123";
 
-// 🔥 GANTI DENGAN CONFIG FIREBASE LO
-const firebaseConfig = {
-  apiKey: "ISI_API_KEY",
-  authDomain: "ISI_PROJECT.firebaseapp.com",
-  projectId: "ISI_PROJECT_ID",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// 🔐 LOGIN
-window.login = function() {
-  const pass = document.getElementById("password").value;
-  if (pass === "admin123") {
+// LOGIN
+function login() {
+  let pass = document.getElementById("password").value;
+  if (pass === PASSWORD) {
     document.getElementById("adminPanel").style.display = "block";
   } else {
     alert("Password salah!");
   }
-};
+}
 
-// ➕ TAMBAH TIM
-window.addTeam = async function() {
-  const name = document.getElementById("teamName").value;
-  const group = document.getElementById("group").value;
+// AMBIL DATA
+function getData() {
+  return JSON.parse(localStorage.getItem("teams")) || [];
+}
 
-  await addDoc(collection(db, "teams"), {
+// SIMPAN DATA
+function saveData(data) {
+  localStorage.setItem("teams", JSON.stringify(data));
+}
+
+// TAMBAH TIM
+function addTeam() {
+  let name = document.getElementById("teamName").value;
+  let group = document.getElementById("group").value;
+
+  let data = getData();
+
+  data.push({
     name,
     group,
     point: 0,
@@ -41,27 +39,18 @@ window.addTeam = async function() {
     diff: 0
   });
 
+  saveData(data);
   alert("Tim ditambahkan!");
-};
-
-// 📥 AMBIL DATA
-async function getData() {
-  const snapshot = await getDocs(collection(db, "teams"));
-  let data = [];
-  snapshot.forEach(docSnap => {
-    data.push({ id: docSnap.id, ...docSnap.data() });
-  });
-  return data;
 }
 
-// ⚽ INPUT HASIL
-window.addMatch = async function() {
-  const t1 = document.getElementById("team1").value;
-  const s1 = parseInt(document.getElementById("score1").value);
-  const t2 = document.getElementById("team2").value;
-  const s2 = parseInt(document.getElementById("score2").value);
+// INPUT HASIL
+function addMatch() {
+  let t1 = document.getElementById("team1").value;
+  let s1 = parseInt(document.getElementById("score1").value);
+  let t2 = document.getElementById("team2").value;
+  let s2 = parseInt(document.getElementById("score2").value);
 
-  let data = await getData();
+  let data = getData();
 
   let team1 = data.find(t => t.name === t1);
   let team2 = data.find(t => t.name === t2);
@@ -89,27 +78,24 @@ window.addMatch = async function() {
     team2.point += 3;
   }
 
-  await updateDoc(doc(db, "teams", team1.id), team1);
-  await updateDoc(doc(db, "teams", team2.id), team2);
-
+  saveData(data);
   alert("Hasil disimpan!");
-};
+}
 
-// ❌ HAPUS TIM
-window.deleteTeam = async function() {
-  const name = document.getElementById("deleteTeam").value;
-  let data = await getData();
-  let team = data.find(t => t.name === name);
+// HAPUS TIM
+function deleteTeam() {
+  let name = document.getElementById("deleteTeam").value;
+  let data = getData();
 
-  if (!team) return alert("Tim tidak ditemukan!");
+  data = data.filter(t => t.name !== name);
 
-  await deleteDoc(doc(db, "teams", team.id));
+  saveData(data);
   alert("Tim dihapus!");
-};
+}
 
-// 📊 RENDER TABEL
-async function renderTable() {
-  let data = await getData();
+// RENDER
+function renderTable() {
+  let data = getData();
 
   let groupA = data.filter(t => t.group === "A");
   let groupB = data.filter(t => t.group === "B");
@@ -147,10 +133,5 @@ async function renderTable() {
     draw("groupB", groupB);
   }
 }
-
-// 🔥 REALTIME UPDATE
-onSnapshot(collection(db, "teams"), () => {
-  renderTable();
-});
 
 renderTable();
