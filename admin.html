@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-box">
+  <h1>ADMIN PANEL</h1>
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="adminPanel" style="display:none;" class="container">
+
+  <div class="card">
+    <h2>Tambah Tim</h2>
+    <input type="text" id="teamName" placeholder="Nama Tim">
+    <select id="group">
+      <option value="A">Grup A</option>
+      <option value="B">Grup B</option>
+    </select>
+    <button onclick="addTeam()">Tambah</button>
+  </div>
+
+  <div class="card">
+    <h2>Input Hasil</h2>
+    <input type="text" id="team1" placeholder="Tim 1">
+    <input type="number" id="score1" placeholder="Skor">
+    <input type="text" id="team2" placeholder="Tim 2">
+    <input type="number" id="score2" placeholder="Skor">
+    <button onclick="addMatch()">Simpan</button>
+  </div>
+
+  <div class="card">
+    <h2>Hapus Tim</h2>
+    <input type="text" id="deleteTeam" placeholder="Nama Tim">
+    <button onclick="deleteTeam()">Hapus</button>
+  </div>
+
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
